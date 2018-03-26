@@ -1,0 +1,175 @@
+body{
+    background-color: #f7f7f7;
+}
+.fl{
+    float: left;
+}
+.fr{
+    float: right;
+}
+#head{
+    width: 100%;
+    height: 75px;
+    line-height: 75px;
+
+    color: #666;
+    background-color:#ffffff;
+}
+.head_nav{
+    width: 960px;
+    margin: 0 auto;
+}
+.mod-header a{
+    color: #666;
+    display: block;
+}
+.mod-header a:hover{
+    text-decoration: none;
+    color: #666;
+}
+.mod-header span{
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 18px;
+    border-left: 1px solid #ccc;
+    height: 30px;
+    line-height: 30px;
+    margin-left: 10px;
+    text-indent: 15px;
+}
+.mod-header a img{
+    width: 150px;
+}
+.login-link a{
+    margin-left: 2px;
+    display: inline-block;
+    width: 60px;
+    height: 32px;
+    line-height: 32px;
+    color: #17bec4;
+    text-align: center;
+    background-color: #f5f5f5;
+    border: 1px solid #17bec4;
+    border-radius: 5px;
+}
+.login-link a:hover{
+    color: #14a1a6;
+    border: 1px solid #14a1a6;
+    text-decoration: none;
+}
+.row_section{
+    width: 960px;
+    background-color: #fff;
+    overflow: hidden;
+    margin: 0 auto;
+    margin-bottom: 20px;
+    padding-top: 35px;
+    padding-bottom: 35px;
+    border: 1px solid #cccccc;
+}
+.header_title{
+    width: 960px;
+    height: 55px;
+    margin: 0 auto;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    line-height: 55px;
+}
+.header_m ,.header_l,.header_r{
+    color: #ffffff;
+    font-size: 20px;
+    width: 260px;
+    height: 55px;
+    border-radius: 5px;
+    background-color: #17bec4;
+    float: left;
+}
+.header_m .header_num,
+.header_l .header_num,
+.header_r .header_num{
+    display: inline-block;
+    margin: 0 20px 0 40px;
+}
+.header_m .header_num i,
+.header_l .header_num i,
+.header_r .header_num i{
+    font-size: 22px;
+}
+.header_sign{
+    width: 90px;
+    height: 55px;
+    line-height: 55px;
+    text-align: center;
+    float: left;
+}
+.header_sign .icon--xiayibu{
+    color: #17bec4;
+    font-size: 36px;
+}
+
+
+.emaliSend{
+    position: relative;
+    padding-left: 240px
+}
+.icon-duigou{
+    position: absolute;
+    top: 0;
+    left: 140px;
+    font-size: 60px;
+    color: #4dbe5a;
+}
+.icon-cuowu{
+    position: absolute;
+    top: 35px;
+    left: 140px;
+    font-size: 60px;
+    color: #e66b63;
+}
+.emaliSend_info{
+    font-size: 24px;
+    line-height: 30px;
+    color: #000;
+}
+
+.modal-dialog{
+    width: 330px;
+    margin: 225px auto;
+}
+.modal-body h5{
+    text-align: center;
+    margin-top: 20px;
+    font-size: 16px;
+}
+.modal-footer button{
+    background-color: #17bec4;
+    color: #ffffff;
+    border: none;
+}
+.modal-footer button:hover{
+    background-color: #14a1a6;
+    color: #ffffff;
+    border: none;
+}
+.modal-footer{
+    border: none;
+}
+
+.emaliSend_email{
+    font-size: 16px;
+    color: #808080;
+    height: 30px;
+    line-height: 30px;
+}
+.emaliSend_email_err{
+    font-size: 36px;
+    color: #e66b63;
+    height: 143px;
+    line-height: 150px;
+
+}
+#resendwrap p{
+    line-height: 34px;
+    font-size: 12px;
+    margin-bottom: 0;
+}
