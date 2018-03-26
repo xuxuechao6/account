@@ -1,9 +1,9 @@
 //sql配置文件================
 module.exports={
     sql1:{
-        host:'192.168.1.192',
-        user:'rtt_dev2',
-        password:'n1mPLPqlniowvgwU',
+        host:'127.0.0.1',
+        user:'root',
+        password:'',
         database:'rtt_dev2',
         port:3306
     },
@@ -14,5 +14,5 @@ module.exports={
         database:'discuz',
         port:3306
     },
-    
+
 }
