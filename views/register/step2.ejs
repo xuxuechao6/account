@@ -103,9 +103,29 @@
     </div>
 </div>
 
+<% include ../footer.html %>
+
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
 
+
+<script>
+    function changeBox(){
+        var H = $(this).height();
+        if(H>550){
+            var h = H -472
+            $(".common_footer").css("margin-top",h+"px")
+        }else{
+            $(".common_footer").css("margin-top","80px")
+        }
+    }
+    window.onload = function() {
+        changeBox();
+    };
+    $(window).resize(function() {
+        changeBox();
+    });
+</script>
 
 <script>
     function OnRSendEmail() {

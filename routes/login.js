@@ -56,6 +56,12 @@ router.get('/register/step3',function (req,res,next) {
 });
 
 
+router.get('/forgetPwd',function (req,res,next) {
+    console.log("注册")
+    res.render('forgetpwd/step1.ejs');
+});
+
+
 router.post('/register',function (req,res,next) {
     console.log("注册")
     users.register(req,res,next)

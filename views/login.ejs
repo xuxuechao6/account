@@ -24,111 +24,96 @@
 
 </head>
 <body>
-
-<div class="container-fluid">
-    <div class="row" style="padding: 0 5%">
-        <div class="header_log">
-            <span>
-                <i class="iconfont icon-shiliangzhinengduixiang"></i>
-            </span>
-
+<div id="wrapper">
+    <div id="head">
+        <div class="head_nav">
+            <div class="mod-header fl">
+                <img src="/images/logo_cn.png" alt="logo">
+            </div>
+            <div class="mod-nav fl">
+                <ul>
+                    <li><a href="https://www.rt-thread.org/index.html">官网</a></li>
+                    <li><a href="https://www.rt-thread.org/qa/forum.php">社区</a></li>
+                    <li><a href="https://www.rt-thread.org/document/site/">文档</a></li>
+                    <li><a href="https://www.rt-thread.org/page/about.html">关于</a></li>
+                </ul>
+            </div>
+            <div class="login-link fr" id="login_link">
+                <span>没有账号？</span>
+                <a  href="/register" class="login-btn"  id="login_btn">立即注册</a>
+            </div>
         </div>
-        <form action="/login" method="post" id="userInfo">
-
-            <div class="input-group" style="margin-top: 20px">
-                <span class="input-group-addon" id="basic-addon1" style="background: #fff;border-right: none;"><i class="iconfont icon-denglu"></i></span>
-                <input type="text" name="username" class="form-control username"  id="username" style="border-left: none" placeholder="Username" aria-describedby="basic-addon1">
-            </div>
-            <p class="usernameInfo" id="usernameInfo"  style="height: 35px;line-height: 35px; color: red; margin-bottom: 0;"></p>
-
-            <div class="input-group">
-                <span class="input-group-addon" id="basic-addon1" style="background: #fff;border-right: none;"><i class="iconfont icon-mima"></i></span>
-                <input type="password" name="password" class="form-control password" id="password" style="border-left: none" placeholder="Password" aria-describedby="basic-addon1">
-            </div>
-            <p class="passwordInfo" id="passwordInfo" style="height: 35px;line-height: 35px; color: red; margin-bottom: 0;"></p>
-
-            <div class="">
-                <span class="fl"><a href="">记住密码</a></span>  <span class="fr"> <a href="#">找回密码？</a></span>
-            </div>
-
-            <button type="button"  onclick="checkUser()" class="btn btn-info" style="width: 100%">登录</button>
-            <button  id="TencentCaptcha" type="button" data-appid="2015160823" data-cbfn="checkCode" style="display: none">登录</button>
-            <div class="register">
-                <span><a href="/register">立即注册</a></span>
-            </div>
-        </form>
-        <div class="footer_login">
-            <span></span>
-            <span>第三方登录</span>
-            <span></span>
-            <ul>
-                <li><a href="/oauth/pc/qq"><i class="iconfont icon-QQ"></i></a></li>
-                <li class="wx"><a href="/oauth"><i class="iconfont icon-wx"></i></a></li>
-                <li><a href=""><i class="iconfont icon-xinlang"></i></a></li>
-            </ul>
-        </div>
-
     </div>
-
 </div>
+
+<main>
+    <section class="login_form clearfix">
+        <div class="login_form_l fl">
+
+        </div>
+        <div class="login_form_r fl">
+            <div>
+                <form action="/login" method="post" id="userInfo">
+                    <h3 class="form_title">账号登录</h3>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1"><i class="iconfont icon-denglu"></i></span>
+                        <input type="text" name="username" class="form-control username"  id="username" placeholder="用户名/邮箱/手机号" aria-describedby="basic-addon1">
+                    </div>
+                    <p class="usernameInfo err_info" id="usernameInfo" ></p>
+
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1"><i class="iconfont icon-mima"></i></span>
+                        <input type="password" name="password" class="form-control password" id="password"placeholder="请输入密码" aria-describedby="basic-addon1">
+                    </div>
+                    <p class="passwordInfo err_info" id="passwordInfo" ></p>
+
+                    <button type="button"  onclick="checkUser()" class="btn btn_login">登录</button>
+                    <button  id="TencentCaptcha" type="button" data-appid="2015160823" data-cbfn="checkCode" >登录</button>
+                    <div class="form_pwd">
+                        <span class="fr"> <a href="/forgetPwd">找回密码？</a></span>
+                    </div>
+                </form>
+            </div>
+            <div class="footer_login">
+                <div class="footer_login_title">
+                    <span class="line"></span>
+                    <span class="title">第三方登录</span>
+                </div>
+                <ul>
+                    <li><a href="/oauth/pc/qq"><i class="iconfont icon-QQ"></i></a></li>
+                    <li class="wx"><a href="/oauth"><i class="iconfont icon-wx"></i></a></li>
+                    <li><a href=""><i class="iconfont icon-xinlang"></i></a></li>
+                </ul>
+            </div>
+
+        </div>
+
+    </section>
+</main>
+
+<% include footer.html %>
+
 
 <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
 
-<script src="/javascripts/login.js"></script>
-
-<!-- <script>
-    window.onload= function (ev) {
-
-        var browser = {
-            versions: function () {
-                var u = navigator.userAgent, app = navigator.appVersion;
-                return {     //移动终端浏览器版本信息
-                    trident: u.indexOf('Trident') > -1, //IE内核
-                    presto: u.indexOf('Presto') > -1, //opera内核
-                    webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
-                    gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
-                    mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
-                    ios: !!u.match(/(i[^;]+;( U;)? CPU.+Mac OS X)/), //ios终端
-                    android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或uc浏览器
-                    iPhone: u.indexOf('iPhone') > -1, //是否为iPhone或者QQHD浏览器
-                    iPad: u.indexOf('iPad') > -1, //是否iPad
-                    webApp: u.indexOf('Safari') == -1 //是否web应该程序，没有头部与底部
-                };
-            }(),
-            language: (navigator.browserLanguage || navigator.language).toLowerCase()
-        }
-        if (browser.versions.mobile) {//判断是否是移动设备打开。browser代码在下面
-            var ua = navigator.userAgent.toLowerCase();//获取判断用的对象
-            if (ua.match(/MicroMessenger/i) == "micromessenger") {
-                //在微信中打开
-                console.log("在微信中打开")
-                setInterval(WeixinJSBridge.call('closeWindow'),2000);
-
-            }
-            if (ua.match(/WeiBo/i) == "weibo") {
-                //在新浪微博客户端打开
-                console.log("在新浪微博客户端打开")
-            }
-            if (ua.match(/QQ/i) == "qq") {
-                //在QQ空间打开
-                console.log("在QQ空间打开")
-            }
-            if (browser.versions.ios) {
-                //是否在IOS浏览器打开
-                console.log("是否在IOS浏览器打开")
-            }
-            if(browser.versions.android){
-                //是否在安卓浏览器打开
-                console.log("是否在安卓浏览器打开")
-            }
-        } else {
-            var wx = $(".wx a")
-            wx.attr('href','/oauth/pc/wx')
-            //否则就是PC浏览器打开
-            console.log("PC")
+<script>
+    function changeBox(){
+        var H = $(this).height();
+        if(H>785){
+            var h = H -727
+            $(".common_footer").css("margin-top",h+"px")
+        }else{
+            $(".common_footer").css("margin-top","80px")
         }
     }
-</script> -->
+    window.onload = function() {
+        changeBox();
+    };
+    $(window).resize(function() {
+        changeBox();
+    });
+</script>
+<script src="/javascripts/login.js"></script>
 
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>

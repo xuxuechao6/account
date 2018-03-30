@@ -104,10 +104,28 @@
         </div>
     </div>
 </div>
-
+<% include ../footer.html %>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
 
+
+<script>
+    function changeBox(){
+        var H = $(this).height();
+        if(H>540){
+            var h = H -445
+            $(".common_footer").css("margin-top",h+"px")
+        }else{
+            $(".common_footer").css("margin-top","80px")
+        }
+    }
+    window.onload = function() {
+        changeBox();
+    };
+    $(window).resize(function() {
+        changeBox();
+    });
+</script>
 
 <script type="text/javascript">
     //设定倒数秒数
