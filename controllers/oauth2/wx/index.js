@@ -139,7 +139,7 @@ function wxRedirect(req,res) {
 console.log(client)
 
     //var auth_callback_url = domain + "/tp5/oauth/WX/oauth.php";
-    var url = client.getAuthorizeURLForWebsite(domain);
+    var url = client.client.getAuthorizeURL(domain, 'state', 'snsapi_userinfo');;
     console.log(url);
     // 重定向请求到微信服务器
     res.redirect(url);

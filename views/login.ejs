@@ -99,16 +99,13 @@
 <script>
     function changeBox(){
         var H = $(this).height();
-        if(H>785){
-            var h = H -727
+        if(H>540){
+            var h = H -445
             $(".common_footer").css("margin-top",h+"px")
         }else{
             $(".common_footer").css("margin-top","80px")
         }
     }
-    window.onload = function() {
-        changeBox();
-    };
     $(window).resize(function() {
         changeBox();
     });
@@ -117,7 +114,7 @@
 
 <script>
     window.onload= function (ev) {
-
+        changeBox();
         var browser = {
             versions: function () {
                 var u = navigator.userAgent, app = navigator.appVersion;
