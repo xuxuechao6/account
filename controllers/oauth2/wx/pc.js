@@ -5,7 +5,7 @@ const db = require('../../../config/db').sql1;
 const mysql = require('mysql');
 const pool = mysql.createPool(db);
 const sql = require('../../../lib/sql');
-const clientInfo = new ClientInfo("WX");
+const clientInfo = new ClientInfo("WXPC");
 
 
 function getToken(openid, callback) {
