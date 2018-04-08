@@ -4,7 +4,6 @@ let info = ""
 
 var request = require('request')
 
-
 function qqRedirect(req,res) {
     ClientInfo.getClientInfo("qq")
         .then(result => {
@@ -53,7 +52,7 @@ function qqLogin(req,res) {
             var qqOpenid = jsonStr['openid'];
             var qqClient_id = jsonStr['client_id'];
             //拿到两个参数以后去获取用户资料
-            request.get({url:'https://graph.qq.com/user/get_user_info?access_token='+ access_token +'&oauth_consumer_key='+ clientInfo.client_id + '&openid=' + qqOpenid}, function (err, httpResponse, body) {
+            request.get({url:'https://graph.qq.com/user/get_user_info?access_token='+ access_token +'&oauth_consumer_key='+ info[0].client_id + '&openid=' + qqOpenid}, function (err, httpResponse, body) {
                 body = JSON.parse(body);
                 console.log(body)
                 res.json({
