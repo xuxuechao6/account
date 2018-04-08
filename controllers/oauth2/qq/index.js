@@ -22,7 +22,6 @@ function qqRedirect(req,res) {
         .catch(err => {
             console.log("系统错误！！！", err)
             console.log("errCode", err.responseCode)
-            console.log("保存用户失败")
         });
 
 
@@ -36,8 +35,10 @@ function qqLogin(req,res) {
     var getTokenUrl = 'https://graph.qq.com/oauth2.0/token?grant_type=authorization_code&client_id='+info[0].client_id+'&client_secret='+info[0].client_secret+'&code='+code+'&redirect_uri='+info[0].redirect_uri;
     // res.send(getTokenUrl);
     console.log("getTokenUrl",getTokenUrl)
+    sendUserinfo(req,res,getTokenUrl)
+}
+function sendUserinfo(req,res,getTokenUrl){
     request.get({url:getTokenUrl},function (err, httpResponse, body) {
-
         var str = body;
         var access_token = str.split('=')[1].split('&')[0];
         console.log(1111,access_token)
@@ -65,7 +66,6 @@ function qqLogin(req,res) {
             });
         })
     })
-
 
 }
 //==============================================
