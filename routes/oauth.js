@@ -12,17 +12,13 @@ router.get('/login', function(req, res, next) {
     client.clientRedirect(req,res);
 });
 
- //微信PC登录流程
+ //微信登录流程
 router.get('/pc/wx', checkSession ,function(req, res) {
     console.log("000",req.url)
     wechat.wxRedirect(req,res);
 });
-router.get('/wx/redirect', checkSession ,function(req, res) {
-    console.log("000",req.url)
-    wechat.wxLogin(req,res);
-});
 
-//微信登录流程
+
 router.get('/wx', checkSession ,function(req, res) {
     console.log("000",req.url)
     wechat.wxRedirect(req,res);

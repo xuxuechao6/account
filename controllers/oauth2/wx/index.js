@@ -6,6 +6,8 @@ const pool = mysql.createPool(db);
 const sql = require('../../../lib/sql');
 const wxusers = require('../../../models/index').wxusers;
 
+
+let client = "";
 function getToken(openid, callback) {
     console.log(666);
     pool.getConnection(function (err, connection) {
@@ -52,7 +54,6 @@ function saveToken(openid, token, callback) {
 }
 
 function wxLogin(req,res) {
-    var client = new OAuth(clientInfo.client_id, clientInfo.client_secret,getToken,saveToken)
     var code = req.query.code;
     console.log("code",code)
     client.getAccessToken(code, function (err, result) {
@@ -122,7 +123,7 @@ function wxRedirect(req,res) {
             console.log("result", result)
             if (result.length > 0) {
                 let domain = result[0].redirect_uri;
-                let client = new OAuth(result[0].client_id, result[0].client_secret,getToken,saveToken)
+                client = new OAuth(result[0].client_id, result[0].client_secret,getToken,saveToken)
                 console.log(client)
                 if(name ==="wx"){
                     var url = client.getAuthorizeURL(domain, 'rt-thread', 'snsapi_userinfo');;
