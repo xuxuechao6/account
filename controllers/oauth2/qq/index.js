@@ -1,19 +1,34 @@
-var ClientInfo = require('../../../models/clientinfo').ClientInfo;
+var ClientInfo = require('../../../models/clientinfo');
 
 var db = require('../../../config/db').sql1;
 var mysql = require('mysql');
 var pool = mysql.createPool(db);
 var sql = require('../../../lib/sql');
-var clientInfo = new ClientInfo("qq");
+
 var request = require('request')
 
 
 function qqRedirect(req,res) {
-    var authorization = 'https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=';
-     var url = authorization + clientInfo.client_id +'&redirect_uri='+clientInfo.redirect_uri+'&state=233&scope=get_user_info,get_vip_info,get_vip_rich_info'
-    console.log(url);
-    // 重定向请求到qq服务器
-    res.redirect(url);
+    ClientInfo.getClientInfo("qq")
+        .then(result => {
+            console.log("result", result)
+            if (result.length > 0) {
+                var authorization = 'https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=';
+                var url = authorization + result[0].client_id +'&redirect_uri='+result[0].redirect_uri+'&state=233&scope=get_user_info'
+                console.log(url);
+                // 重定向请求到qq服务器
+                res.redirect(url);
+            } else {
+
+            }
+        })
+        .catch(err => {
+            console.log("系统错误！！！", err)
+            console.log("errCode", err.responseCode)
+            console.log("保存用户失败")
+        });
+
+
 }
 
 function qqLogin(req,res) {

@@ -1,10 +1,9 @@
 const OAuth = require('wechat-oauth');
-const ClientInfo = require('../../../models/clientinfo').ClientInfo;
+const ClientInfo = require('../../../models/clientinfo');
 const db = require('../../../config/db').sql1;
 const mysql = require('mysql');
 const pool = mysql.createPool(db);
 const sql = require('../../../lib/sql');
-const clientInfo = new ClientInfo("WXPC");
 const wxusers = require('../../../models/index').wxusers;
 
 function getToken(openid, callback) {
@@ -113,16 +112,17 @@ function wxLogin(req,res) {
 function wxRedirect(req,res) {
     var name = '';
     if(req.url ==="/pc/wx"){
-        name = "PCWX";
+        name = "WXPC";
     }else{
-        name = "wx";
+        name = "WX";
     }
+    console.log(name)
     ClientInfo.getClientInfo(name)
         .then(result => {
             console.log("result", result)
             if (result.length > 0) {
-                let domain = result.redirect_uri;
-                let client = new OAuth(result.client_id, result.client_secret,getToken,saveToken)
+                let domain = result[0].redirect_uri;
+                let client = new OAuth(result[0].client_id, result[0].client_secret,getToken,saveToken)
                 console.log(client)
                 if(name ==="wx"){
                     var url = client.getAuthorizeURL(domain, 'rt-thread', 'snsapi_userinfo');;
