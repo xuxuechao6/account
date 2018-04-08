@@ -4,7 +4,6 @@ var pool = mysql.createPool(db);
 var sql = require('../lib/sql');
 
  function clientSchema(name,callback){
-console.log(1111)
     pool.getConnection(function (err, connection) {
         if (err) {
             console.log("数据库连接错误")
@@ -22,7 +21,25 @@ console.log(1111)
     });
 }
 
-
+exports.getClientInfo = function(name){
+    return new Promise(( resolve, reject ) => {
+        pool.getConnection(function(err, connection) {
+            if (err) {
+                reject( err )
+            } else {
+                connection.query(sql.getClientInfo,[name], ( err, rows) => {
+                    if ( err ) {
+                        reject( err )
+                    } else {
+                        console.log("getUserInfo:",rows)
+                        resolve( rows )
+                    }
+                    connection.release()
+                })
+            }
+        })
+    })
+};
 
 
 var ClientInfo = function(name) {

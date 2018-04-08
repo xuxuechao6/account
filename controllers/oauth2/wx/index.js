@@ -1,6 +1,5 @@
 const OAuth = require('wechat-oauth');
 const ClientInfo = require('../../../models/clientinfo').ClientInfo;
-
 const db = require('../../../config/db').sql1;
 const mysql = require('mysql');
 const pool = mysql.createPool(db);
@@ -112,20 +111,43 @@ function wxLogin(req,res) {
 
 
 function wxRedirect(req,res) {
-    let domain = clientInfo.redirect_uri;
-    let client = new OAuth(clientInfo.client_id, clientInfo.client_secret,getToken,saveToken)
-    console.log(client)
+    var name = '';
     if(req.url ==="/pc/wx"){
-        var url = client.getAuthorizeURLForWebsite(domain);
-        console.log("PCurl",url);
-        // 重定向请求到微信服务器
-        res.redirect(url);
+        name = "PCWX";
     }else{
-        var url = client.getAuthorizeURL(domain, 'rt-thread', 'snsapi_userinfo');;
-        console.log("WXurl",url);
-        // 重定向请求到微信服务器
-        res.redirect(url);
+        name = "wx";
     }
+    ClientInfo.getClientInfo(name)
+        .then(result => {
+            console.log("result", result)
+            if (result.length > 0) {
+                let domain = result.redirect_uri;
+                let client = new OAuth(result.client_id, result.client_secret,getToken,saveToken)
+                console.log(client)
+                if(name ==="wx"){
+                    var url = client.getAuthorizeURL(domain, 'rt-thread', 'snsapi_userinfo');;
+                    console.log("WXurl",url);
+                    // 重定向请求到微信服务器
+                    res.redirect(url);
+                }else{
+                    var url = client.getAuthorizeURLForWebsite(domain);
+                    console.log("PCurl",url);
+                    // 重定向请求到微信服务器
+                    res.redirect(url);
+                }
+            } else {
+
+            }
+        })
+        .catch(err => {
+            console.log("系统错误！！！", err)
+            console.log("errCode", err.responseCode)
+            console.log("保存用户失败")
+        });
+
+
+
+
 
 
 
