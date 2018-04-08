@@ -6,13 +6,13 @@ const activeEmail = require('../../middlewares/activeemail');
 const rePostEmail =function (req,res,next) {
     // 创建一个邮件对象
     const _email = req.body.email
-    // const _username = req.body.username
+    const _type = req.body.type
     const _username = req.body.username
     console.log("_email:",_email)
     console.log("_username:",_username)
 
     const getToken = activeEmail.getToken(_email);
-    const postEmail = email.postEmail("register")
+    const postEmail = email.postEmail(_type)
         .then(email)
     Promise.all([
         getToken,
@@ -21,7 +21,12 @@ const rePostEmail =function (req,res,next) {
         console.log("token:",token)
         console.log("email:",email)
         if (email.length >0 && token !== null) {
-            const url = req.headers.origin+"/register/ActivateAccount?token="+token
+            let url =""
+            if(_type === "register"){
+                url = req.headers.origin + "/register/ActivateAccount?token=" + token
+            }else{
+                url = req.headers.origin + "/forgetPwd/reSetPassword?username=" + _username+"&token="+token
+            }
             const _text = email[0].text.replace(/url/, url)
             let mail = {
                 from:'"'+email[0].from_username+'"'+email[0].from_email, // 发件人
@@ -48,11 +53,31 @@ const rePostEmail =function (req,res,next) {
 }
 
 const checkEmailToken = function (req,res,next) {
-    if (req.query.token){
+    if (req.query.token && req.query.username){
+        console.log("密码忘记")
+        checkPwdToken(req,res,next)
+    }else{
+        console.log("激活账号")
         checkToken(req,res,next)
     }
 }
+async function checkPwdToken(req,res,next) {
+    const result = await activeEmail.checkPwdToken(req.query.token);
 
+    console.log(result,"req.query.token")
+
+    if(result){
+        const result2 = await activeEmail.getToken(req.query.username);
+        console.log(result2,"req.query.token")
+        req.session.tokenPwdInfo = true
+        res.redirect("/forgetPwd/step3")
+        }else{
+        const result2 = await activeEmail.getToken(req.query.username);
+        console.log(result2,"req.query.token")
+        req.session.tokenPwdInfo = false
+         res.redirect("/forgetPwd/step3")
+    }
+}
 async function checkToken(req,res,next) {
     const result = await activeEmail.checkToken(req.query.token);
     console.log(result,"req.query.token")
@@ -60,13 +85,12 @@ async function checkToken(req,res,next) {
         req.session.tokenInfo = true
         const result2 = await activeEmail.activeAccount(req.query.token);
         if(result2){
-            res.redirect("/register/step3")
+                res.redirect("/register/step3")
         }else{
             req.session.tokenInfo = false
             res.redirect("/register/step3")
             console.log("系统错误")
         }
-
     }else{
         req.session.tokenInfo = false
         res.redirect("/register/step3")

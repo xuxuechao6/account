@@ -89,11 +89,24 @@ async function checkToken(data) {
     if(result.length > 0){
         if(isValidToken(result[0])){
             return true
+        }else{
+            return false
         }
     }else {
         return false
     }
 }
+
+async function checkPwdToken(data) {
+    const result = await email.checkToken(data)
+    console.log("result2",result)
+    if(result.length > 0){
+            return true
+    }else {
+        return false
+    }
+}
+
 async function activeAccount(data) {
     const result =await email.activeAccount(data)
     console.log("result3",result)
@@ -107,4 +120,5 @@ async function activeAccount(data) {
 exports.getToken =getToken
 exports.updateToken =updateToken
 exports.checkToken =checkToken
+exports.checkPwdToken =checkPwdToken
 exports.activeAccount =activeAccount

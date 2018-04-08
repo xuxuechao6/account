@@ -134,7 +134,12 @@ const register = function (req, res, next) {
                 req.session.username = param.username;
                 req.session.email = param.email;
                 res.json({"result": {"status": true}})
-                postEmail(req, res, next);
+                const _email = req.body.email
+                const _username = req.body.username
+                const _type = "register"
+                const _url = req.headers.origin
+                console.log("_email:", _email)
+                postEmail(_email, _username, _type,_url);
             } else {
                 res.json({"result": {"status": false}})
             }
@@ -145,15 +150,11 @@ const register = function (req, res, next) {
 
 };
 //发送注册激活邮件
-const postEmail = function (req, res, next) {
+const postEmail = function (_email, _username, type,_url) {
     // 创建一个邮件对象
-    const _email = req.body.email
-    // const _username = req.body.username
-    const _username = req.body.username
-    console.log("_email:", _email)
-
+    console.log(type,"type:",type==="forgetPwd")
     const getToken = activeEmail.getToken(_email);
-    const postEmail = email.postEmail("register")
+    const postEmail = email.postEmail(type)
         .then(email)
     Promise.all([
         getToken,
@@ -162,7 +163,13 @@ const postEmail = function (req, res, next) {
         console.log("token:", token)
         console.log("email:", email)
         if (email.length > 0 && token !== null) {
-            const url = req.headers.origin + "/register/ActivateAccount?token=" + token
+            let url =""
+            if(type === "register"){
+                url = _url + "/register/ActivateAccount?token=" + token
+            }else{
+                 url = _url + "/forgetPwd/reSetPassword?username=" + _username+"&token="+token
+            }
+
             const _text = email[0].text.replace(/url/, url)
             let mail = {
                 from: '"' + email[0].from_username + '"' + email[0].from_email, // 发件人
@@ -189,8 +196,28 @@ const postEmail = function (req, res, next) {
 }
 
 
+
+//修改密码验证邮箱
+async  function postPwdEmail(req, res, next) {
+    const _email = req.body.email
+    const _isEmail =  await userInfo.checkEmail(_email);
+    console.log("_isEmail",_isEmail)
+    if (_isEmail.length>0){
+        const _username = _isEmail[0].username
+        const _type = "forgetPwd"
+        const _url = req.headers.origin
+        req.session.username = _username;
+        req.session.email = _email;
+        res.json({"result": {"status": true}})
+        postEmail(_email, _username, _type,_url);
+    } else{
+        res.json({"result": {"status": false,"errInfo":"该邮箱未注册"}})
+    }
+}
+
 exports.login = login;
 exports.checkUserName = checkUserName;
 exports.checkEmail = checkEmail;
+exports.postPwdEmail = postPwdEmail;
 exports.register = register;
 

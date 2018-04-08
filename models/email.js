@@ -14,7 +14,7 @@ exports.postEmail = function(type){
                     if ( err ) {
                         reject( err )
                     } else {
-                        console.log("rows:",rows)
+                        console.log("emailContentInfo:",rows)
                         resolve( rows )
                     }
                     connection.release()

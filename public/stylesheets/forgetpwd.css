@@ -18,7 +18,7 @@
 .row_section .input-group{
     float: left;
     width: 35%;
-    margin-left: 15%;
+    margin-left: 20%;
 }
 .row_section .input-info{
     float: left;
@@ -39,7 +39,7 @@
     position: absolute;
     height: 50px;
     line-height: 50px;
-    left: 46%;
+    left: 51%;
     z-index: 99;
 }
 .row_input .input-sign .icon-sign{
@@ -56,43 +56,13 @@
     display: none;
 
 }
-
-.protocol{
-    width: 90%;
-    margin: 0 auto;
-    margin-top: 30px;
-    height: 130px;
-    border-top: 1px solid #ccc;
-    text-align: center;
-
+.protocol_email{
+    margin-top: 35px;
+    width: 10%;
+    margin-left: 25%;
 }
-.protocol .err_info{
-    height: 25px;
-    line-height: 25px;
-    color: #fc4343;
-}
-.protocol label{
-    margin-top: 30px;
-    height: 25px;
-    line-height: 25px;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    cursor: pointer;
-}
-.protocol .agreement{
-    color: #17bec4;
-    cursor: pointer;
-}
-.protocol .agreement:hover{
-    text-decoration: underline;
-    color: #14a1a6;
-}
-.protocol .register_btn{
-    padding: 10px 30px;
+.protocol_email .register_btn{
+    padding: 10px 115px;
     background-color: #17bec4;
     border: none;
     border-radius: 5px;
@@ -101,23 +71,27 @@
     margin:  0 auto;
     margin-bottom: 20px;
 }
-.protocol .register_btn:hover{
+.protocol_email .register_btn:hover{
     background-color: #14a1a6;
 }
-.btn_agreement{
-    color: #fff;
-    background-color: #17bec4;
-    border-color: #17bec4;
-}
-.btn_agreement:hover,.btn_agreement:focus,.btn_agreement:active{
-    background-color: #14a1a6;
-    border-color: #14a1a6;
-    color: #fff;
-}
-.modal-content{
-    top: 50px;
-}
-.modal-content .modal-body{
-    height: 450px;
-    overflow: auto;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
