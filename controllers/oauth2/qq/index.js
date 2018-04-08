@@ -1,9 +1,6 @@
 var ClientInfo = require('../../../models/clientinfo');
 
-var db = require('../../../config/db').sql1;
-var mysql = require('mysql');
-var pool = mysql.createPool(db);
-var sql = require('../../../lib/sql');
+let info = ""
 
 var request = require('request')
 
@@ -13,6 +10,7 @@ function qqRedirect(req,res) {
         .then(result => {
             console.log("result", result)
             if (result.length > 0) {
+                info = result
                 var authorization = 'https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=';
                 var url = authorization + result[0].client_id +'&redirect_uri='+result[0].redirect_uri+'&state=233&scope=get_user_info'
                 console.log(url);
@@ -32,13 +30,11 @@ function qqRedirect(req,res) {
 }
 
 function qqLogin(req,res) {
-    console.log(clientInfo.client_id)
-    console.log(clientInfo.client_secret)
     //拿到code
     var code = req.query.code;
     //获取token
     console.log(code)
-    var getTokenUrl = 'https://graph.qq.com/oauth2.0/token?grant_type=authorization_code&client_id='+clientInfo.client_id+'&client_secret='+clientInfo.client_secret+'&code='+code+'&redirect_uri='+clientInfo.redirect_uri;
+    var getTokenUrl = 'https://graph.qq.com/oauth2.0/token?grant_type=authorization_code&client_id='+info[0].client_id+'&client_secret='+info[0].client_secret+'&code='+code+'&redirect_uri='+info[0].redirect_uri;
     // res.send(getTokenUrl);
     console.log("getTokenUrl",getTokenUrl)
     request.get({url:getTokenUrl},function (err, httpResponse, body) {
