@@ -4,13 +4,13 @@ const sqlConfig = require('../config/db').sql1;
 const pool = mysql.createPool(sqlConfig);
 
 
-exports.getUserInfo = function(userInfo){
+exports.addUserInfo = function(userInfo){
     return new Promise(( resolve, reject ) => {
         pool.getConnection(function(err, connection) {
             if (err) {
                 reject( err )
             } else {
-                connection.query(sql.addWXUserInfo, [userInfo], ( err, rows) => {
+                connection.query(sql.addWXUserInfo, [userInfo.openid, userInfo.nickname, userInfo.sex, userInfo.language, userInfo.city,userInfo.province, userInfo.country, userInfo.headimgurl, userInfo.privilege.toString(), userInfo.unionid], ( err, rows) => {
                     if ( err ) {
                         reject( err )
                     } else {
@@ -23,6 +23,47 @@ exports.getUserInfo = function(userInfo){
         })
     })
 };
+
+exports.getUserInfo = function(unionid){
+    return new Promise(( resolve, reject ) => {
+        pool.getConnection(function(err, connection) {
+            if (err) {
+                reject( err )
+            } else {
+                connection.query(sql.getWXUserInfo,[unionid], ( err, rows) => {
+                    if ( err ) {
+                        reject( err )
+                    } else {
+                        console.log("getUserInfo:",rows)
+                        resolve( rows )
+                    }
+                    connection.release()
+                })
+            }
+        })
+    })
+};
+
+exports.checkUserName = function(userName){
+    return new Promise(( resolve, reject ) => {
+        pool.getConnection(function(err, connection) {
+            if (err) {
+                reject( err )
+            } else {
+                console.log("zhao zhao zhao 用户名")
+                connection.query(sql.getUserByUserName, [userName], ( err, rows) => {
+                    if ( err ) {
+                        reject( err )
+                    } else {
+                        console.log("rows:",rows)
+                        resolve( rows )
+                    }
+                    connection.release()
+                })
+            }
+        })
+    })
+}
 
 exports.saveToken = function(data){
     return new Promise(( resolve, reject ) => {

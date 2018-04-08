@@ -5,8 +5,8 @@ const db = require('../../../config/db').sql1;
 const mysql = require('mysql');
 const pool = mysql.createPool(db);
 const sql = require('../../../lib/sql');
-const clientInfo = new ClientInfo("WX");
-
+const clientInfo = new ClientInfo("WXPC");
+const wxusers = require('../../../models/index').wxusers;
 
 function getToken(openid, callback) {
     console.log(666);
@@ -21,9 +21,6 @@ function getToken(openid, callback) {
                     return callback(err);
                     //退出query方法，后面的代码不执行了；
                 }else {
-                    console.log(2222)
-                    console.log(sql.getAccessToken)
-                    console.log(result)
                     return callback(null, result[0]);
                     /*
                     console.log(JSON.stringify(result));
@@ -41,7 +38,6 @@ function getToken(openid, callback) {
 }
 
 function saveToken(openid, token, callback) {
-
     var fields = [token.access_token, token.expires_in, token.refresh_token, token.openid, token.scope, token.create_at];
     pool.getConnection(function (err, connection) {
         if (err) {
@@ -58,74 +54,56 @@ function saveToken(openid, token, callback) {
 }
 
 function wxLogin(req,res) {
-    console.log(clientInfo.client_id)
-    console.log(clientInfo.client_secret)
     var client = new OAuth(clientInfo.client_id, clientInfo.client_secret,getToken,saveToken)
     var code = req.query.code;
     console.log("code",code)
     client.getAccessToken(code, function (err, result) {
-        console.log("getAccessToken",result.data)
         if(result){
             var accessToken = result.data.access_token;
             var openid = result.data.openid;
-            console.log(openid)
-            getUserInfo(openid)
-        }
-
-    });
-    function getUserInfo(openid) {
-
-        pool.getConnection(function (err, connection) {
-            if (err) {
-                console.log(err)
-            } else {
-                //查询数据库里的用户信息
-                connection.query(sql.getWXUserInfo, [openid], function (err, result) {
-                    console.log(3333,result)
-                    if (err){
-                        console.log("错误：" + err.message);
-                    }else if(result.length === 0){
+            var unionid = result.data.unionid;
+            console.log(unionid)
+            wxusers.getUserInfo(unionid)
+                .then(result => {
+                    console.log("result", result)
+                    if(result.length === 0){
                         //没有 登陆过的用户
-                        getWXUserInfo(openid);
+                        addWXUserInfo(openid);
                     }else {
                         res.render('login.ejs')
                     }
-
                 })
-            }
-        });
+                .catch(err => {
+                    console.log("系统错误！！！", err)
+                    console.log("errCode", err.responseCode)
+                    console.log("保存用户失败")
+                });
+        }
+    });
 
 
-
-    }
-    function getWXUserInfo(openid) {
+    function addWXUserInfo(openid) {
         client.getUser(openid, function (err, result) {
             console.log(777,result)
             if(result.length !==0){
-                var userInfo = result;
-                console.log("userInfo",userInfo)
-                var _userInfo = [result.openid, result.nickname, result.sex, result.language, result.city,
-                    result.province, result.country, result.headimgurl, result.privilege, result.unionid];
-                console.log(_userInfo)
-                pool.getConnection(function (err, connection) {
-                    if (err) {
-                        console.log(err)
-                    } else {
-                        //添加用户信息
-                        connection.query(sql.addWXUserInfo, _userInfo, function (err, result) {
-                            if (err){
-                                console.log("错误：" + err.message);
-                            }else {
-                                console.log(3333,result)
-                            }
+                console.log("userInfo",result)
+               wxusers.addUserInfo(result)
+                   .then(result => {
+                       console.log("result", result)
+                       if (result != null) {
+                           console.log("保存用户成功")
+                       } else {
+                           console.log("保存用户失败")
+                       }
+                   })
+                   .catch(err => {
+                       console.log("系统错误！！！", err)
+                       console.log("errCode", err.responseCode)
+                       console.log("保存用户失败")
+                   });
 
-                        })
-                    }
-                });
+
             }
-            // res.render('index.ejs',{
-            //     result: {title:'hello world'}
-            // });
             res.render('login.ejs')
         });
     }
@@ -134,15 +112,24 @@ function wxLogin(req,res) {
 
 
 function wxRedirect(req,res) {
-    var domain = clientInfo.redirect_uri;
-    var client = new OAuth(clientInfo.client_id, clientInfo.client_secret,getToken,saveToken)
-console.log(client)
+    let domain = clientInfo.redirect_uri;
+    let client = new OAuth(clientInfo.client_id, clientInfo.client_secret,getToken,saveToken)
+    console.log(client)
+    if(req.url ==="/pc/wx"){
+        var url = client.getAuthorizeURLForWebsite(domain);
+        console.log("PCurl",url);
+        // 重定向请求到微信服务器
+        res.redirect(url);
+    }else{
+        var url = client.getAuthorizeURL(domain, 'rt-thread', 'snsapi_userinfo');;
+        console.log("WXurl",url);
+        // 重定向请求到微信服务器
+        res.redirect(url);
+    }
 
-    //var auth_callback_url = domain + "/tp5/oauth/WX/oauth.php";
-    var url = client.getAuthorizeURL(domain, 'state', 'snsapi_userinfo');;
-    console.log("url",url);
-    // 重定向请求到微信服务器
-    res.redirect(url);
+
+
+
 }
 
 

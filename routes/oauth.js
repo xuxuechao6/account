@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const checkSession = require('./../middlewares/check').checkSession;
 const wechat = require('../controllers/oauth2/wx');
-const pcWechat = require('../controllers/oauth2/wx/pc');
 const client = require('../controllers/oauth2/client')
 const qq = require('../controllers/oauth2/qq');
 
@@ -16,11 +15,11 @@ router.get('/login', function(req, res, next) {
  //微信PC登录流程
 router.get('/pc/wx', checkSession ,function(req, res) {
     console.log("000",req.url)
-    pcWechat.wxRedirect(req,res);
+    wechat.wxRedirect(req,res);
 });
 router.get('/pc/wx/redirect', checkSession ,function(req, res) {
     console.log("000",req.url)
-    pcWechat.wxLogin(req,res);
+    wechat.wxLogin(req,res);
 });
 
 //微信登录流程
