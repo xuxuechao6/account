@@ -125,7 +125,7 @@ function wxRedirect(req,res) {
                 let domain = result[0].redirect_uri;
                 client = new OAuth(result[0].client_id, result[0].client_secret,getToken,saveToken)
                 console.log(client)
-                if(name ==="wx"){
+                if(name ==="WX"){
                     var url = client.getAuthorizeURL(domain, 'rt-thread', 'snsapi_userinfo');;
                     console.log("WXurl",url);
                     // 重定向请求到微信服务器
