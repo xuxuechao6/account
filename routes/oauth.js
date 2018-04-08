@@ -17,7 +17,7 @@ router.get('/pc/wx', checkSession ,function(req, res) {
     console.log("000",req.url)
     wechat.wxRedirect(req,res);
 });
-router.get('/pc/wx/redirect', checkSession ,function(req, res) {
+router.get('/wx/redirect', checkSession ,function(req, res) {
     console.log("000",req.url)
     wechat.wxLogin(req,res);
 });
