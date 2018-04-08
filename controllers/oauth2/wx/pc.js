@@ -140,7 +140,7 @@ console.log(client)
 
     //var auth_callback_url = domain + "/tp5/oauth/WX/oauth.php";
     var url = client.getAuthorizeURLForWebsite(domain);
-    console.log(url);
+    console.log("url",url);
     // 重定向请求到微信服务器
     res.redirect(url);
 }
