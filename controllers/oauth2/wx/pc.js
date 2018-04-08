@@ -6,7 +6,7 @@ const mysql = require('mysql');
 const pool = mysql.createPool(db);
 const sql = require('../../../lib/sql');
 const clientInfo = new ClientInfo("WXPC");
-
+const wxusers = require('../../models/index').wxusers;
 
 function getToken(openid, callback) {
     console.log(666);
@@ -98,36 +98,18 @@ function wxLogin(req,res) {
 
 
     }
-    function getWXUserInfo(openid) {
-        client.getUser(openid, function (err, result) {
-            console.log(777,result)
-            if(result.length !==0){
-                var userInfo = result;
-                console.log("userInfo",userInfo)
-                var _userInfo = [result.openid, result.nickname, result.sex, result.language, result.city,
-                    result.province, result.country, result.headimgurl, result.privilege, result.unionid];
-                console.log(_userInfo)
-                pool.getConnection(function (err, connection) {
-                    if (err) {
-                        console.log(err)
-                    } else {
-                        //添加用户信息
-                        connection.query(sql.addWXUserInfo, _userInfo, function (err, result) {
-                            if (err){
-                                console.log("错误：" + err.message);
-                            }else {
-                                console.log(3333,result)
-                            }
+    async function getWXUserInfo(openid) {
+        const  result = await client.getUser(openid)
+        if(result.length !==0){
+            console.log("userInfo",result)
+            const _userInfo = [result.openid, result.nickname, result.sex, result.language, result.city,
+                result.province, result.country, result.headimgurl, result.privilege, result.unionid];
+            console.log(_userInfo)
+            const  result2 = await wxusers.getUserInfo(_userInfo)
+            console.log("userInfo2",result2)
+            res.render("login.ejs")
+        }
 
-                        })
-                    }
-                });
-            }
-            // res.render('index.ejs',{
-            //     result: {title:'hello world'}
-            // });
-            res.render('login.ejs')
-        });
     }
 
 }
