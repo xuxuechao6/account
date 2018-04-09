@@ -43,9 +43,9 @@ app.use(session({
     cookie: {maxAge: 60 * 1000 * 30} // 过期时间（毫秒）
 }));
 
-app.use('/oauth', oauth);
-app.use('/', login);
-app.use('/oauth2.0', oauthServer);
+app.use('/account/oauth', oauth);
+app.use('/account', login);
+app.use('/account/oauth2.0', oauthServer);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
