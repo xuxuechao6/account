@@ -23,9 +23,9 @@ const rePostEmail =function (req,res,next) {
         if (email.length >0 && token !== null) {
             let url =""
             if(_type === "register"){
-                url = req.headers.origin + "/register/ActivateAccount?token=" + token
+                url = req.headers.origin + "/account/register/ActivateAccount?token=" + token
             }else{
-                url = req.headers.origin + "/forgetPwd/reSetPassword?username=" + _username+"&token="+token
+                url = req.headers.origin + "/account/forgetPwd/reSetPassword?username=" + _username+"&token="+token
             }
             const _text = email[0].text.replace(/url/, url)
             let mail = {
@@ -70,12 +70,12 @@ async function checkPwdToken(req,res,next) {
         const result2 = await activeEmail.getToken(req.query.username);
         console.log(result2,"req.query.token")
         req.session.tokenPwdInfo = true
-        res.redirect("/forgetPwd/step3")
+        res.redirect("/account/forgetPwd/step3")
         }else{
         const result2 = await activeEmail.getToken(req.query.username);
         console.log(result2,"req.query.token")
         req.session.tokenPwdInfo = false
-         res.redirect("/forgetPwd/step3")
+         res.redirect("/account/forgetPwd/step3")
     }
 }
 async function checkToken(req,res,next) {
@@ -88,12 +88,12 @@ async function checkToken(req,res,next) {
                 res.redirect("/register/step3")
         }else{
             req.session.tokenInfo = false
-            res.redirect("/register/step3")
+            res.redirect("/account/register/step3")
             console.log("系统错误")
         }
     }else{
         req.session.tokenInfo = false
-        res.redirect("/register/step3")
+        res.redirect("/account/register/step3")
     }
 }
 exports.rePostEmail = rePostEmail;

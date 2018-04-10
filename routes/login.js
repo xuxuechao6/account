@@ -50,7 +50,7 @@ console.log(11111)
 
 router.get('/logout', function(req, res){
     req.logout();
-    res.redirect('/');
+    res.redirect('/account/login');
 });
 
 router.get('/register',function (req,res,next) {
@@ -62,7 +62,7 @@ router.get('/register/step2',function (req,res,next) {
     if(req.session.username && req.session.email){
         res.render("register/step2.ejs",{"result":{"username":req.session.username,"email":req.session.email}})
     }else{
-        res.redirect('/register');
+        res.redirect('/account/register');
     }
 
 });
@@ -73,7 +73,7 @@ router.get('/register/step3',function (req,res,next) {
         console.log(1111)
         res.render('register/step3.ejs',{"result":req.session.tokenInfo});
     }else{
-        res.redirect('/register');
+        res.redirect('/account/register');
     }
 
 });
@@ -120,7 +120,7 @@ router.get('/forgetPwd/step2',function (req,res,next) {
     if(req.session.username && req.session.email){
         res.render("forgetpwd/step2.ejs",{"result":{"username":req.session.username,"email":req.session.email}})
     }else{
-        res.redirect('/login');
+        res.redirect('/account/login');
     }
     res.render('forgetpwd/step2.ejs');
 });
