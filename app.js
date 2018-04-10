@@ -36,7 +36,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(cookieParser('RT-Thread'));
-app.use(express.static(path.join(__dirname, 'public')));
+
+// 静态文件处理；
+var publicPath = path.resolve(__dirname, "public");
+app.use("/account", express.static(publicPath));
 
 app.use(session({
     secret: 'Thread', //secret的值建议使用随机字符串

@@ -11,7 +11,7 @@ function checkCode(res){
     if(res.ret === 0){
         $.ajax({
             type: "POST",
-            url: "/login",
+            url: "/account/login",
             data: _data,
             dataType : "json",
         })

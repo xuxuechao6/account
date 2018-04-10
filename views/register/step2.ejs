@@ -10,9 +10,9 @@
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <!-- iconfont 文件 -->
-    <link rel="stylesheet" type="text/css" href="/stylesheets/iconfont/iconfont.css">
-    <link rel="stylesheet" type="text/css" href="/stylesheets/header.css">
-    <link rel="stylesheet" type="text/css" href="/stylesheets/register2.css">
+    <link rel="stylesheet" type="text/css" href="/account/stylesheets/iconfont/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="/account/stylesheets/header.css">
+    <link rel="stylesheet" type="text/css" href="/account/stylesheets/register2.css">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -31,7 +31,7 @@
             </div>
             <div class="login-link fr" id="login_link">
                 <span>我已注册，现在就</span>
-                <a  href="/login" class="login-btn"  id="login_btn">登录</a>
+                <a  href="/account/login" class="login-btn"  id="login_btn">登录</a>
             </div>
         </div>
     </div>
@@ -134,7 +134,7 @@
         console.log(_email)
         $.ajax({
             method: "POST",
-            url: "/validationEmail",
+            url: "/account/validationEmail",
             data: { "email":_email ,"username":_username,"type":"register"}
         })
             .success(function (msg) {
