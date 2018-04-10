@@ -5,7 +5,7 @@ var clientSchema = require('../../../models/clientinfo').clientSchema;
 
 function    clientRedirect(req,res) {
     console.log(req.headers.referer)
-        var authorization = req.headers.referer+'oauth2.0/authorize?response_type=code&client_id=';
+        var authorization = req.headers.referer+'/oauth2.0/authorize?response_type=code&client_id=';
     var client = req.query.client;
     clientSchema(client,function (result) {
         var url = authorization + result.client_id +'&redirect_uri='+result.redirect_uri+'&state=233&scope=get_user_info,get_vip_info,get_vip_rich_info'

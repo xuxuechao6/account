@@ -22,6 +22,7 @@ exports.authorization = [
         console.log(333)
         db.clients.findByClientId(clientID)
         .then((client) => {
+            console.log(888)
         if (client) {
             client.scope = scope; // eslint-disable-line no-param-reassign
         }
@@ -33,21 +34,26 @@ exports.authorization = [
 })
 .catch(err => done(err));
 }), (req, res, next) => {
+        console.log(444)
     // Render the decision dialog if the client isn't a trusted client
     // TODO:  Make a mechanism so that if this isn't a trusted client, the user can record that
     // they have consented but also make a mechanism so that if the user revokes access to any of
     // the clients then they will have to re-consent.
     db.clients.findByClientId(req.query.client_id)
         .then((client) => {
+            console.log(5555)
         if (client != null && client.trustedClient && client.trustedClient === true) {
         // This is how we short call the decision like the dialog below does
         server.decision({ loadTransaction: false }, (serverReq, callback) => {
             callback(null, { allow: true });
     })(req, res, next);
     } else {
+            console.log(6666)
         res.render('dialog', { transactionID: req.oauth2.transactionID, user: req.user, client: req.oauth2.client });
     }
 })
 .catch(() =>
+
     res.render('dialog', { transactionID: req.oauth2.transactionID, user: req.user, client: req.oauth2.client }));
+        console.log(777)
 }];
