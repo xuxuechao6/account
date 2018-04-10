@@ -139,7 +139,7 @@
                 //在微信中打开
                 console.log("在微信中打开")
                 var wx = $(".wx a")
-                wx.attr('href','/oauth/wx')
+                wx.attr('href','/account/oauth/wx')
 
             }
             if (ua.match(/WeiBo/i) == "weibo") {
@@ -160,7 +160,7 @@
             }
         } else {
             var wx = $(".wx a")
-            wx.attr('href','/oauth/pc/wx')
+            wx.attr('href','/account/oauth/pc/wx')
             //否则就是PC浏览器打开
             console.log("PC")
         }

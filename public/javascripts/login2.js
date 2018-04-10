@@ -25,10 +25,10 @@ function checkCode(res){
                         document.getElementById("passwordInfo").innerHTML="密码错误";
                         document.getElementById("password").focus()
                     }else if (res.result.errInfo ===3) {
-                            window.location.href='/register/step2';
+                            window.location.href='/account/register/step2';
                     }
                 }else{
-                    window.location.href='/login/redirectTo';
+                    window.location.href='/account/login/redirectTo';
                 }
             })
             .error(function (err) {
