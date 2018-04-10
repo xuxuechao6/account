@@ -118,11 +118,11 @@ router.post('/forgetPwd',function (req,res,next) {
 router.get('/forgetPwd/step2',function (req,res,next) {
     console.log("取回密码 2")
     if(req.session.username && req.session.email){
-        res.render("forgetPwd/step2.ejs",{"result":{"username":req.session.username,"email":req.session.email}})
+        res.render("forgetpwd/step2.ejs",{"result":{"username":req.session.username,"email":req.session.email}})
     }else{
         res.redirect('/login');
     }
-    res.render('forgetPwd/step2.ejs');
+    res.render('forgetpwd/step2.ejs');
 });
 
 router.post('/validationEmailPwd',function (req,res,next) {
@@ -140,9 +140,9 @@ router.get('/forgetPwd/step3',function (req,res,next) {
     console.log("找回密码 3");
     console.log(req.session.tokenPwdInfo)
     if(req.session.tokenPwdInfo !== undefined){
-        res.render('forgetPwd/step3.ejs',{"result":req.session.tokenPwdInfo});
+        res.render('forgetpwd/step3.ejs',{"result":req.session.tokenPwdInfo});
     }else{
-        res.render('forgetPwd/step3.ejs',{"result":false,"info":"未知错误"});
+        res.render('forgetpwd/step3.ejs',{"result":false,"info":"未知错误"});
     }
 });
 
