@@ -149,7 +149,7 @@ const register = function (req, res, next) {
         });
 
 };
-//发送注册激活邮件
+//发送修改密码邮件
 const postEmail = function (_email, _username, type,_url) {
     // 创建一个邮件对象
     console.log(type,"type:",type==="forgetPwd")
@@ -165,17 +165,17 @@ const postEmail = function (_email, _username, type,_url) {
         if (email.length > 0 && token !== null) {
             let url =""
             if(type === "register"){
-                url = _url + "/register/ActivateAccount?token=" + token
+                url = _url + "/account/register/ActivateAccount?token=" + token
             }else{
-                 url = _url + "/forgetPwd/reSetPassword?username=" + _username+"&token="+token
+                 url = _url + "/account/forgetPwd/reSetPassword?username=" + _username+"&token="+token
             }
-
-            const _text = email[0].text.replace(/url/, url)
+            const _text = email[0].text.replace(/url/, '<p style="text-indent: 2em"><a href="'+url+'" target="_blank">'+url+'</a></p>')
             let mail = {
                 from: '"' + email[0].from_username + '"' + email[0].from_email, // 发件人
                 subject: email[0].subject,// 主题
                 to: _email,// 收件人
-                text: '亲爱的用户 ' + _username + '：您好！\n' + _text// 邮件内容，HTML格式
+                html:'<p>亲爱的用户 '+_username+'：您好！</p>' +_text // 邮件内容，HTML格式
+                //html: // 邮件内容，HTML格式
             };
             validationEmail.sendEmail(mail)
                 .then(result => {

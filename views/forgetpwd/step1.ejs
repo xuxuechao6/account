@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -43,7 +43,7 @@
                         if(res.result.status){
                             window.location.href='/account/forgetPwd/step2';
                         }else{
-                            window.location.href='/account/register';
+                            alert("该账号尚未注册")
                         }
                     })
                     .error(function (err) {
@@ -53,7 +53,6 @@
         }
     </script>
 </head>
-<body>
 <div id="wrapper">
     <div id="head">
         <div class="head_nav">
@@ -95,7 +94,7 @@
             </div>
         </header>
         <section class="register-box">
-            <form id="form" action="/register" method="post" >
+            <form id="form" action="/account/register" method="post" >
                 <div class="row_section">
                     <div class="row_input" id="email">
                         <div class="input-group">

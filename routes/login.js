@@ -139,10 +139,12 @@ router.get('/forgetPwd/reSetPassword',function (req,res,next) {
 router.get('/forgetPwd/step3',function (req,res,next) {
     console.log("找回密码 3");
     console.log(req.session.tokenPwdInfo)
+    console.log(req.query)
     if(req.session.tokenPwdInfo !== undefined){
-        res.render('forgetpwd/step3.ejs',{"result":req.session.tokenPwdInfo});
+        res.render('forgetpwd/step3.ejs',{"result":req.session.tokenPwdInfo,"info":req.query});
     }else{
-        res.render('forgetpwd/step3.ejs',{"result":false,"info":"未知错误"});
+        res.render("login.ejs")
+       // res.render('forgetpwd/step3.ejs',{"result":false,"errInfo":"未知错误","info":req.query});
     }
 });
 

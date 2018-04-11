@@ -27,12 +27,12 @@ const rePostEmail =function (req,res,next) {
             }else{
                 url = req.headers.origin + "/account/forgetPwd/reSetPassword?username=" + _username+"&token="+token
             }
-            const _text = email[0].text.replace(/url/, url)
+            const _text = email[0].text.replace(/url/, '<p style="text-indent: 2em"><a href="'+url+'" target="_blank">'+url+'</a></p>')
             let mail = {
                 from:'"'+email[0].from_username+'"'+email[0].from_email, // 发件人
                 subject: email[0].subject,// 主题
                 to: _email,// 收件人
-                text: '亲爱的用户 '+_username+'：您好！\n' + _text// 邮件内容，HTML格式
+                html:'<p>亲爱的用户 '+_username+'：您好！</p>' +_text // 邮件内容，HTML格式
             };
             validationEmail.sendEmail(mail)
                 .then(result => {
@@ -53,6 +53,7 @@ const rePostEmail =function (req,res,next) {
 }
 
 const checkEmailToken = function (req,res,next) {
+    console.log(req.query)
     if (req.query.token && req.query.username){
         console.log("密码忘记")
         checkPwdToken(req,res,next)
@@ -70,12 +71,12 @@ async function checkPwdToken(req,res,next) {
         const result2 = await activeEmail.getToken(req.query.username);
         console.log(result2,"req.query.token")
         req.session.tokenPwdInfo = true
-        res.redirect("/account/forgetPwd/step3")
+        res.redirect("/account/forgetPwd/step3?username="+req.query.username+"&token="+req.query.token)
         }else{
         const result2 = await activeEmail.getToken(req.query.username);
         console.log(result2,"req.query.token")
         req.session.tokenPwdInfo = false
-         res.redirect("/account/forgetPwd/step3")
+        res.redirect("/account/forgetPwd/step3?username="+req.query.username+"&token="+req.query.token)
     }
 }
 async function checkToken(req,res,next) {
@@ -85,7 +86,7 @@ async function checkToken(req,res,next) {
         req.session.tokenInfo = true
         const result2 = await activeEmail.activeAccount(req.query.token);
         if(result2){
-                res.redirect("/register/step3")
+                res.redirect("/account/register/step3")
         }else{
             req.session.tokenInfo = false
             res.redirect("/account/register/step3")
