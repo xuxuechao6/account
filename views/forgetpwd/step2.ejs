@@ -134,7 +134,7 @@
         console.log(_email)
         $.ajax({
             method: "POST",
-            url: "/account/validationEmailPwd",
+            url: "/account/forgetPwd/validationEmail",
             data: { "email":_email ,"username":_username,"type":"forgetPwd"}
         })
             .success(function (msg) {

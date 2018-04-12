@@ -74,7 +74,7 @@
                         <% if(result){ %>
                         <i class="iconfont icon-duigou"></i>
                         <p class="emaliSend_info">注册成功！！！</p>
-                        <p class="emaliSend_email"><span id="showtime">10</span>s后自动跳转到登陆界面,或 <a href="/login"> 立即跳转</a>&nbsp;&nbsp;</p>
+                        <p class="emaliSend_email"><span id="showtime">10</span>s后自动跳转到登陆界面,或 <a href="/account/login"> 立即跳转</a>&nbsp;&nbsp;</p>
                         <% }else{ %>
                         <i class="iconfont icon-cuowu"></i>
                         <p class="emaliSend_email_err">邮箱地址验证失败！</p>
@@ -135,7 +135,7 @@
         t -= 1;
         document.getElementById('showtime').innerHTML= t;
         if(t===0){
-            location.href='/login';
+            location.href='/account/login';
         }
         //每秒执行一次,showTime()
         setTimeout("showTime()",1000);

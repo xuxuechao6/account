@@ -4,7 +4,6 @@ const validationEmail = require('../../middlewares/validationemail');
 const email = require('../../models/index').email;
 const activeEmail = require('../../middlewares/activeemail');
 const md5 = require('md5');
-const crypto = require('crypto');
 
 
 /**
@@ -13,25 +12,16 @@ const crypto = require('crypto');
  */
 async function login(req, res, next) {
     const param = req.body;
-    console.log(param)
-    //=================================================
-    const hash = crypto.createHash("md5");
-    hash.update(param.password);          //直接对"123456"字符串加密
-    const encode = hash.digest('hex');
-    console.log(encode)
-    //===================================================
-    console.log("得到输入的账号和密码:" + param.username + encode);
+    console.log("得到输入的账号和密码:",param);
     const user = await userInfo.findUser(param.username);
     if (user.length > 0) {
-        const _password = user[0].password;
-        if (_password === encode) {
+        const encode = md5(param.password+user[0].salt);
+        if (user[0].password === encode) {
             console.log("密码正确")
             const activeInfo = await isActive(user[0].email);
             if (activeInfo !== null) {
-                console.log(11111)
                 console.log(activeInfo)
                 if (activeInfo.is_active) {
-                    console.log(22222)
                     req.session.userInfo  = user[0];
                     res.send({"result": {"status": true}})
                 } else {
@@ -101,14 +91,14 @@ const checkEmail = function (req, res, next) {
         });
 }
 
+//注册
 const register = function (req, res, next) {
     const param = req.body;
-    console.log(param)
-    //=================================================
-    const hash = crypto.createHash("md5");
-    hash.update(param.password);          //直接对"123456"字符串加密
-    const encode = hash.digest('hex');
-    console.log(encode)
+
+    //===================密码加密==============================
+    const salt = Math.random().toString(36).substr(2).slice(2,8);
+    console.log(salt)
+    const encode = md5(param.password+salt)
     //===================================================
 
     const regDate = Date.parse(new Date());
@@ -128,7 +118,7 @@ const register = function (req, res, next) {
                 return false;
             }
         })
-    userInfo.register(param.username, encode, param.email)
+    userInfo.register(param.username, encode, param.email,salt)
         .then(result => {
             if (result.affectedRows > 0) {
                 req.session.username = param.username;
@@ -167,7 +157,7 @@ const postEmail = function (_email, _username, type,_url) {
             if(type === "register"){
                 url = _url + "/account/register/ActivateAccount?token=" + token
             }else{
-                 url = _url + "/account/forgetPwd/reSetPassword?username=" + _username+"&token="+token
+                 url = _url + "/account/forgetPwd/resetPassword?username=" + _username+"&token="+token
             }
             const _text = email[0].text.replace(/url/, '<p style="text-indent: 2em"><a href="'+url+'" target="_blank">'+url+'</a></p>')
             let mail = {
@@ -208,16 +198,52 @@ async  function postPwdEmail(req, res, next) {
         const _url = req.headers.origin
         req.session.username = _username;
         req.session.email = _email;
-        res.json({"result": {"status": true}})
         postEmail(_email, _username, _type,_url);
+        res.json({"result": {"status": true}})
     } else{
         res.json({"result": {"status": false,"errInfo":"该邮箱未注册"}})
     }
 }
+async function resetPassword(req,res,next){
+    const password = req.body.password
+    const token = req.body.token
+    const _token = req.session.resetPassword.token
+    const username = req.body.username
+    const _username = req.session.resetPassword.username
+
+
+    console.log("newP",md5(md5("19930101.")+"24ef67"))
+    if(password){
+        if (token===_token && username===_username){
+            console.log("password",password)
+            //===================密码加密==============================
+            const salt = Math.random().toString(36).substr(2).slice(2,8);
+            console.log(salt)
+            const encode = md5(password+salt)
+            //===================================================
+            const result = await userInfo.resetPassword(username,encode,salt)
+            console.log("result:",result)
+            if (result.affectedRows>0){
+                res.json({"result": {"status": true,"info":"密码修改成功！！！"}})
+            } else{
+                res.json({"result": {"status": true,"info":"密码修改失败，请联系管理员"}})
+            }
+
+        }else{
+            res.json({"result": {"status": false,"info":"链接不可用！！！"}})
+        }
+    }else{
+        res.json({"result": {"status": false,"info":"非法操作！！！"}})
+    }
+
+}
+
+
 
 exports.login = login;
 exports.checkUserName = checkUserName;
 exports.checkEmail = checkEmail;
 exports.postPwdEmail = postPwdEmail;
 exports.register = register;
+exports.resetPassword = resetPassword;
 

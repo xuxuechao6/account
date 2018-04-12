@@ -108,13 +108,33 @@ exports.checkEmail = function(email){
 }
 
 
-exports.register = function(username,password,email){
+exports.register = function(username,password,email,salt){
     return new Promise(( resolve, reject ) => {
         pool.getConnection(function(err, connection) {
             if (err) {
                 reject( err )
             } else {
-                connection.query(sql.register, [username,password,email], ( err, rows) => {
+                connection.query(sql.register, [username,password,email,salt], ( err, rows) => {
+                    if ( err ) {
+                        reject( err )
+                    } else {
+                        console.log("rows:",rows)
+                        resolve( rows )
+                    }
+                    connection.release()
+                })
+            }
+        })
+    })
+}
+
+exports.resetPassword = function(username,password,salt){
+    return new Promise(( resolve, reject ) => {
+        pool.getConnection(function(err, connection) {
+            if (err) {
+                reject( err )
+            } else {
+                connection.query(sql.resetPassword, [password,salt,username], ( err, rows) => {
                     if ( err ) {
                         reject( err )
                     } else {

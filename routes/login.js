@@ -122,28 +122,36 @@ router.get('/forgetPwd/step2',function (req,res,next) {
     }else{
         res.redirect('/account/login');
     }
-    res.render('forgetpwd/step2.ejs');
 });
 
-router.post('/validationEmailPwd',function (req,res,next) {
+router.post('/forgetPwd/validationEmail',function (req,res,next) {
     console.log("重复发送验证码")
     email.rePostEmail(req,res,next)
 });
 
-router.get('/forgetPwd/reSetPassword',function (req,res,next) {
+router.get('/forgetPwd/resetPassword',function (req,res,next) {
     console.log("邮箱验证码验证")
     email.checkEmailToken(req,res,next)
+});
+
+router.post('/forgetPwd/resetPassword',function (req,res,next) {
+    console.log("修改密码")
+    if(req.session.resetPassword === undefined){
+        res.json({"result": {"status": false,"errInfo":"链接不可用"}})
+    }else{
+        users.resetPassword(req,res,next)
+    }
+
 });
 
 
 router.get('/forgetPwd/step3',function (req,res,next) {
     console.log("找回密码 3");
-    console.log(req.session.tokenPwdInfo)
-    console.log(req.query)
-    if(req.session.tokenPwdInfo !== undefined){
-        res.render('forgetpwd/step3.ejs',{"result":req.session.tokenPwdInfo,"info":req.query});
+    console.log(req.session.resetPassword)
+    if(req.session.resetPassword !== undefined){
+        res.render('forgetpwd/step3.ejs',{"result":req.session.resetPassword.tokenPwdInfo,"info":req.session.resetPassword});
     }else{
-        res.render("login.ejs")
+        res.redirect('/account/login');
        // res.render('forgetpwd/step3.ejs',{"result":false,"errInfo":"未知错误","info":req.query});
     }
 });

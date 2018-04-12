@@ -25,7 +25,7 @@ const rePostEmail =function (req,res,next) {
             if(_type === "register"){
                 url = req.headers.origin + "/account/register/ActivateAccount?token=" + token
             }else{
-                url = req.headers.origin + "/account/forgetPwd/reSetPassword?username=" + _username+"&token="+token
+                url = req.headers.origin + "/account/forgetPwd/resetPassword?username=" + _username+"&token="+token
             }
             const _text = email[0].text.replace(/url/, '<p style="text-indent: 2em"><a href="'+url+'" target="_blank">'+url+'</a></p>')
             let mail = {
@@ -70,13 +70,21 @@ async function checkPwdToken(req,res,next) {
     if(result){
         const result2 = await activeEmail.getToken(req.query.username);
         console.log(result2,"req.query.token")
-        req.session.tokenPwdInfo = true
-        res.redirect("/account/forgetPwd/step3?username="+req.query.username+"&token="+req.query.token)
+        req.session.resetPassword= {
+            "tokenPwdInfo":true,
+            "username":req.query.username,
+            "token":req.query.token,
+        }
+        res.redirect("/account/forgetPwd/step3")
         }else{
         const result2 = await activeEmail.getToken(req.query.username);
         console.log(result2,"req.query.token")
-        req.session.tokenPwdInfo = false
-        res.redirect("/account/forgetPwd/step3?username="+req.query.username+"&token="+req.query.token)
+        req.session.resetPassword= {
+            "tokenPwdInfo":false,
+            "username":req.query.username,
+            "token":req.query.token,
+        }
+        res.redirect("/account/forgetPwd/step3")
     }
 }
 async function checkToken(req,res,next) {

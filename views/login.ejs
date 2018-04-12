@@ -20,6 +20,7 @@
     <![endif]-->
     <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="/account/javascripts/md5.js"></script>
     <script src="/account/javascripts/login2.js"></script>
 
 </head>
@@ -99,20 +100,13 @@
 <script>
     function changeBox(){
         var H = $(this).height();
-        if(H>540){
-            var h = H -445
+        if(H>800){
+            var h = H -727
             $(".common_footer").css("margin-top",h+"px")
         }else{
             $(".common_footer").css("margin-top","80px")
         }
     }
-    $(window).resize(function() {
-        changeBox();
-    });
-</script>
-<script src="/account/javascripts/login.js"></script>
-
-<script>
     window.onload= function (ev) {
         changeBox();
         var browser = {
@@ -165,7 +159,14 @@
             console.log("PC")
         }
     }
+    $(window).resize(function() {
+        changeBox();
+    });
 </script>
+
+<script src="/account/javascripts/login.js"></script>
+
+
 
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>

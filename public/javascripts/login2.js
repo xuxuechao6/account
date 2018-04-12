@@ -4,7 +4,7 @@ function checkCode(res){
     //res（验证成功） = {ret:0,ticket:"String",randstr:"String"}
     var _data ={
         username:document.getElementById("username").value,
-        password:document.getElementById("password").value,
+        password:md5(document.getElementById("password").value),
         ticket:res.ticket
     }
     console.log("_data",_data)

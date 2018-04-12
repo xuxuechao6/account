@@ -1,0 +1,21 @@
+//sql服务器配置文件================
+module.exports={
+    sql1:{
+        host:'192.168.1.192',
+        user:'rtt_oauth2_dev',
+        password:'SZhxar5tU5EskVVG',
+        database:'rtt_oauth2_dev',
+        port:3306
+    },
+}
+
+//sql本地配置文件================
+module.exports={
+    sql1:{
+        host:'127.0.0.1',
+        user:'root',
+        password:'123456',
+        database:'rtt_user_center',
+        port:3306
+    }
+}
