@@ -10,50 +10,99 @@
 const db          = require('../../models/clients');
 const oauth2orize = require('oauth2orize');
 const login       = require('connect-ensure-login');
+const oauth2       = require('../../models/oauth2.0');
+
+
 
 // create OAuth 2.0 server
-const server = oauth2orize.createServer();
+const OAuth2Server = require('oauth2-server');
 
 
 
-exports.authorization = [
-    login.ensureLoggedIn(),
-    server.authorization((clientID, redirectURI, scope, done) => {
-        console.log(333)
-        db.clients.findByClientId(clientID)
-        .then((client) => {
-            console.log(888)
-        if (client) {
-            client.scope = scope; // eslint-disable-line no-param-reassign
-        }
-        // WARNING: For security purposes, it is highly advisable to check that
-        //          redirectURI provided by the client matches one registered with
-        //          the server.  For simplicity, this example does not.  You have
-        //          been warned.
-        return done(null, client, redirectURI);
-})
-.catch(err => done(err));
-}), (req, res, next) => {
-        console.log(444)
-    // Render the decision dialog if the client isn't a trusted client
-    // TODO:  Make a mechanism so that if this isn't a trusted client, the user can record that
-    // they have consented but also make a mechanism so that if the user revokes access to any of
-    // the clients then they will have to re-consent.
-    db.clients.findByClientId(req.query.client_id)
-        .then((client) => {
-            console.log(5555)
-        if (client != null && client.trustedClient && client.trustedClient === true) {
-        // This is how we short call the decision like the dialog below does
-        server.decision({ loadTransaction: false }, (serverReq, callback) => {
-            callback(null, { allow: true });
-    })(req, res, next);
-    } else {
-            console.log(6666)
-        res.render('dialog', { transactionID: req.oauth2.transactionID, user: req.user, client: req.oauth2.client });
+const oauth = new OAuth2Server({
+    model: require('./model')
+});
+
+// const Request = OAuth2Server.Request;
+// const Response = OAuth2Server.Response;
+//
+// let request = new Request({/*...*/});
+// let response = new Response({/*...*/});
+//
+// exports.authorization = oauth.authorize(request, response)
+//     .then((code) => {
+//         // The resource owner granted the access request.
+//     })
+//     .catch((err) => {
+//         if (err instanceof AccessDeniedError) {
+//             // The resource owner denied the access request.
+//         } else {
+//             // Access was not granted due to some other error condition.
+//         }
+//     });
+
+
+
+
+const checkLogin = async (req, res, next)=>{
+    if (!req.session.user) {
+        //   重新组装 登陆 的URL 并重定向到 登陆页面
+         const result = await findClientInfo(req, res);
+        const url = redirectLogin(req,res,result);
+        res.redirect(url)
+    }else{
+        next();
     }
-})
-.catch(() =>
 
-    res.render('dialog', { transactionID: req.oauth2.transactionID, user: req.user, client: req.oauth2.client }));
-        console.log(777)
-}];
+
+}
+
+function redirectLogin(req,res,result) {
+    let url = "";
+    if (req.query.which==="error") {
+        //错误页面  抛出错误
+        return false;
+    }else{   // 重定向URL    遇到错误抛出错误
+        if(req.query.client_id!==result.client_id){
+             url ='/account/oauth2.0/login?which=error&display='+req.session.display+'&error=100010&response_type='+req.query.response_type+'&client_id='+req.query.client_id+'&redirect_uri='+req.query.redirect_uri+'&scope='+req.query.scope
+            console.log("redirect uri is illegal(100010)")
+
+        }else if(req.query.redirect_uri!==result.redirect_uri){
+             url ='/account/oauth2.0/login?which=error&display='+req.session.display+'&error=100010&response_type='+req.query.response_type+'&client_id='+req.query.client_id+'&redirect_uri='+req.query.redirect_uri+'&scope='+req.query.scope
+            console.log("redirect uri is illegal(100010)")
+
+        }else {
+             url ='/account/oauth2.0/login?display='+req.session.display+'&response_type='+req.query.response_type+'&client_id='+req.query.client_id+'&redirect_uri='+req.query.redirect_uri+'&scope='+req.query.scope
+        }
+        return url;
+    }
+}
+
+async function findClientInfo(req, res) {
+    const result = await  oauth2.checkClientInfo(req.query.client_id)
+    console.log("result333",result)
+    if(result.length>0){
+        return result[0];
+    }else{
+        //错误的client_id  抛出异常
+        console.log("client_id未注册")
+        res.render("error.ejs")
+    }
+}
+
+async function checkClientInfo(req,res) {
+    const result = await findClientInfo(req,res);
+    const url =redirectLogin(req,res,result)
+if(url){
+       res.render("login.ejs")
+}else{
+    console.log("client_id未注册")
+    res.render("error.ejs")
+}
+
+}
+
+
+//==============================================
+exports.checkClientInfo = checkClientInfo;
+exports.checkLogin = checkLogin;

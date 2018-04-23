@@ -10,30 +10,16 @@ router.get('/', function(req, res, next) {
     });
 });
 router.get('/login', function(req, res, next) {
+if(req.session.display==="phone"){
+    res.render("login2.ejs");
+}else if (req.session.display==="pc") {
+    res.render("login.ejs");
+}else{
+    res.render("login.ejs");
+}
 
-    function brows($agent){//移动终端浏览器版本信息
-        return {
-            ios: !!$agent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
-            android: $agent.indexOf('Android') > -1 || $agent.indexOf('Linux') > -1, //android终端或者uc浏览器
-            iPhone: $agent.indexOf('iPhone') > -1 || $agent.indexOf('Mac') > -1, //是否为iPhone或者QQHD浏览器
-            iPad: $agent.indexOf('iPad') > -1, //是否iPad
-        }
-    }
-    $a=brows(req.headers['user-agent']);
-    console.log($a);
-    $url="";
-    if ($a.iPad)//当ipad终端时
-    {$url = 'login2.ejs';}
-    else if ($a.iPhone)//当iphone终端时
-    {$url = 'login2.ejs'; }
-    else if ($a.ios)//当ios终端时
-    {$url = 'login2.ejs'; }
-    else if ($a.android) //当Android终端时
-    {$url = 'login2.ejs';}
-    else//否则
-        $url = 'login.ejs';
 
-    res.render($url);
+
 });
 
 router.get('/login/redirectTo', function(req, res, next) {
@@ -42,7 +28,7 @@ router.get('/login/redirectTo', function(req, res, next) {
 
 
 router.post('/login',function (req,res,next) {
-console.log(11111)
+console.log(req.headers.referer)
     users.login(req,res,next)
 });
 //这里getUser方法需要自定义

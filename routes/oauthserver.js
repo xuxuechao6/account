@@ -13,7 +13,21 @@ require('../middlewares/auth');
 
 
 
-router.get('/authorize', oauthServer.authorization);
 
+
+
+
+
+//微信登录流程
+router.get('/authorize', oauthServer.checkLogin ,function(req, res) {
+    console.log("000",req.url)
+    oauthServer.authorization(req,res,next)
+});
+
+
+router.get('/login',function (req,res) {
+    console.log("000",req.query)
+    oauthServer.checkClientInfo(req,res)
+} );
 
 module.exports = router;

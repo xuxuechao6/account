@@ -5,7 +5,7 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-
+const router  = express.Router();
 const login = require('./routes/login');
 const oauth = require('./routes/oauth');
 const oauthServer = require('./routes/oauthserver');
@@ -46,9 +46,44 @@ app.use(session({
     cookie: {maxAge: 60 * 1000 * 30} // 过期时间（毫秒）
 }));
 
+
+
+app.use('/',function (req,res,next) {
+    function brows($agent){//移动终端浏览器版本信息
+        return {
+            ios: !!$agent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+            android: $agent.indexOf('Android') > -1 || $agent.indexOf('Linux') > -1, //android终端或者uc浏览器
+            iPhone: $agent.indexOf('iPhone') > -1 || $agent.indexOf('Mac') > -1, //是否为iPhone或者QQHD浏览器
+            iPad: $agent.indexOf('iPad') > -1, //是否iPad
+        }
+    }
+    $a=brows(req.headers['user-agent']);
+    console.log($a);
+    let display = "";
+    if ($a.iPad)//当ipad终端时
+    {display = 'phone';}
+    else if ($a.iPhone)//当iphone终端时
+    {display = 'phone'; }
+    else if ($a.ios)//当ios终端时
+    {display = 'phone'; }
+    else if ($a.android) //当Android终端时
+    {display = 'phone';}
+    else{
+        display = 'pc';
+    }
+    req.session.display = display;
+    console.log("display:",req.session.display)
+     next();
+
+})
+
 app.use('/account/oauth', oauth);
 app.use('/account', login);
 app.use('/account/oauth2.0', oauthServer);
+
+
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -56,6 +91,9 @@ app.use(function(req, res, next) {
   err.status = 404;
   next(err);
 });
+
+
+
 
 // error handler
 app.use(function(err, req, res, next) {
